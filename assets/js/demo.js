@@ -7,9 +7,7 @@ var svg = d3.selectAll("body")
     .attr({width: width, height: height})
     .style({border: "solid 2px black"});
 
-svg.append("line");
-
-var circle_data = [[100, 0, 0, "yellow", "orange", 10], [10, 400, 0, "blue", "green", 5]];
+var circle_data = [[100, 0, 0, "yellow", "orange", 10, 0], [10, 400, 0, "blue", "green", 5, 0], [40, -400, 0, "red", "yellow", 10, 180]];
 var deg = 1;
 
 var circles = svg.selectAll("circle")
@@ -28,16 +26,19 @@ var circles = svg.selectAll("circle")
 
 function new_pos(degrees){
   var radians = degrees * (Math.PI/180);
+  console.log(degrees);
   return{cx: width/2 + (400 * Math.cos(radians)), cy: height/2 + (400 * Math.sin(radians))};
 };
 
 function update_circle(){
-  var new_attr = new_pos(deg);
-  var mini_circle = d3.select("#circle1").attr(new_attr);
-  line_attr = {x1: width/2, y1: height/2, x2: new_attr.cx, y2: new_attr.cy, style: "stroke:rgb(255,0,0);stroke-width:2"};
-  var line = d3.select("line").attr(line_attr);
-  var div = d3.select("div").html(JSON.stringify(new_attr) + JSON.stringify(line_attr));
-  deg++;
+  var mini_circle_data = d3.select("#circle1").data();
+  var mini_circle2_data = d3.select("#circle2").data();
+  d3.select("#circle1").attr(new_pos(mini_circle_data[0][6]));
+  d3.select("#circle2").attr(new_pos(mini_circle2_data[0][6]));
+  mini_circle_data[0][6]++;
+  mini_circle2_data[0][6]++;
+  d3.select("#circle1").data(mini_circle_data);
+  d3.select("#circle2").data(mini_circle2_data);
 };
 
 setInterval(update_circle, 15);
